@@ -6,38 +6,38 @@
 <title>系統/平台開發流程 — PDP</title>
 <style>
   :root {
-    --brand-1: #3B5FBF;
-    --brand-2: #2D7DD2;
-    --brand-3: #1E9FC4;
-    --brand: #2D7DD2;
-    --brand-dark: #1c4fa0;
-    --brand-light: #e8f2fb;
-    --accent: #1E9FC4;
-    --muted: #93b8d4;
-    --border: #dde6ef;
-    --border-muted: #b4cfe3;
-    --bg: #f0f5fa;
-    --bg-card: #ffffff;
-    --bg-secondary: #f7fafd;
-    --text: #1a2a3a;
-    --text-muted: #4a6070;
-    --text-light: #7a96a8;
-    --ai-bg: #edf6fb;
-    --ai-border: #7ec8e3;
-    --ai-text: #0f4a60;
-    --added-bg: #eaf6f1;
-    --added-border: #5bb890;
-    --added-text: #0f3d28;
-    --modified-bg: #eef3fd;
-    --modified-border: #6b96d8;
-    --modified-text: #1a3060;
+    --brand-1: #3B5D6B;
+    --brand-2: #4A6358;
+    --brand-3: #8FAF9B;
+    --brand: #3B5D6B;
+    --brand-dark: #2C4651;
+    --brand-light: #E8EDEE;
+    --accent: #8FAF9B;
+    --muted: #969696;
+    --border: #EEEEEE;
+    --border-muted: #DDDDDD;
+    --bg: #F6F6F6;
+    --bg-card: #FFFFFF;
+    --bg-secondary: #F6F6F6;
+    --text: #333333;
+    --text-muted: #666666;
+    --text-light: #888888;
+    --ai-bg: #EFF2EA;
+    --ai-border: #A9C398;
+    --ai-text: #4C5D3E;
+    --added-bg: #EDF1EE;
+    --added-border: #8FAF9B;
+    --added-text: #3D5247;
+    --modified-bg: #E8EDEE;
+    --modified-border: #3B5D6B;
+    --modified-text: #2C4651;
     --wrong-bg: #fcecec;
     --wrong-border: #e3aaaa;
     --wrong-text: #9c3a3a;
     --radius: 10px;
     --radius-lg: 16px;
-    --shadow: 0 2px 12px rgba(45,125,210,0.07), 0 1px 4px rgba(45,125,210,0.04);
-    --shadow-hover: 0 8px 28px rgba(45,125,210,0.14);
+    --shadow: 0 2px 12px rgba(59,93,107,0.07), 0 1px 4px rgba(59,93,107,0.04);
+    --shadow-hover: 0 8px 28px rgba(59,93,107,0.14);
     --tr: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1);
   }
 
@@ -55,12 +55,12 @@
 
   /* ── Header ── */
   .site-header {
-    background: linear-gradient(135deg, #3B5FBF 0%, #2D7DD2 50%, #1E9FC4 100%);
+    background: linear-gradient(135deg, #2C4651 0%, #3B5D6B 50%, #4A6358 100%);
     padding: 32px 24px 0;
     position: sticky;
     top: 0;
     z-index: 100;
-    box-shadow: 0 4px 20px rgba(30,80,180,0.18);
+    box-shadow: 0 4px 20px rgba(44,70,81,0.18);
   }
   .header-inner {
     max-width: 860px;
@@ -158,7 +158,7 @@
 
   /* ── Insight callout ── */
   .insight-box {
-    background: linear-gradient(135deg, #3B5FBF, #1E9FC4);
+    background: linear-gradient(135deg, #3B5D6B, #4A6358);
     border-radius: var(--radius-lg);
     padding: 22px 26px;
     margin-bottom: 36px;
@@ -186,7 +186,7 @@
     left: 22px;
     top: 0; bottom: 0;
     width: 2px;
-    background: linear-gradient(to bottom, #3B5FBF, #1E9FC4 80%, transparent);
+    background: linear-gradient(to bottom, #3B5D6B, #8FAF9B 80%, transparent);
     border-radius: 2px;
   }
   .phase-block {
@@ -252,11 +252,11 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    box-shadow: 0 2px 6px rgba(59,95,191,0.25);
+    box-shadow: 0 2px 6px rgba(59,93,107,0.25);
   }
   .phase-num.new-step {
-    background: linear-gradient(135deg, #3db88a, #1E9FC4);
-    box-shadow: 0 2px 6px rgba(61,184,138,0.3);
+    background: linear-gradient(135deg, #647B6D, #8FAF9B);
+    box-shadow: 0 2px 6px rgba(100,123,109,0.3);
   }
   .phase-title-wrap { flex: 1; min-width: 0; }
   .phase-title {
@@ -408,7 +408,7 @@
 
   /* ── Vendor note ── */
   .vendor-note {
-    background: #f0f5fb;
+    background: #E8EDEE;
     border-left: 3px solid var(--brand-2);
     border-radius: 0 var(--radius) var(--radius) 0;
     padding: 12px 16px;
@@ -577,7 +577,7 @@
     justify-content: center;
     flex-shrink: 0;
   }
-  .cmp-no.add { background: linear-gradient(135deg, #3db88a, #1E9FC4); }
+  .cmp-no.add { background: linear-gradient(135deg, #647B6D, #8FAF9B); }
   .cmp-body { display: grid; grid-template-columns: 1fr 1fr; }
   .cmp-col { padding: 12px 16px; }
   .cmp-col + .cmp-col { border-left: 1px solid var(--border); }
@@ -597,6 +597,15 @@
     margin-top: 6px;
   }
   .cmp-out strong { color: var(--brand-dark); font-weight: 700; }
+  .cmp-note {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    padding: 11px 16px;
+    background: var(--brand-light);
+    border-top: 1px solid var(--border);
+  }
+  .cmp-note strong { color: var(--brand-dark); font-weight: 700; }
 
   /* ── Decision guide ── */
   .decide {
@@ -704,7 +713,7 @@
   .term-modal-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(20,42,72,0.5);
+    background: rgba(44,70,81,0.5);
     display: none;
     align-items: center;
     justify-content: center;
@@ -716,7 +725,7 @@
     position: relative;
     background: var(--bg-card);
     border-radius: var(--radius-lg);
-    box-shadow: 0 24px 64px rgba(20,42,72,0.32);
+    box-shadow: 0 24px 64px rgba(44,70,81,0.32);
     max-width: 420px;
     width: 100%;
     padding: 26px 28px;
@@ -887,7 +896,7 @@
   </div>
 
   <div class="cmp-card">
-    <div class="cmp-stage"><span class="cmp-no">1</span>Concept｜需求發想與市場確認</div>
+    <div class="cmp-stage"><span class="cmp-no">1</span>Concept｜需求發想與價值確認</div>
     <div class="cmp-body">
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
@@ -900,6 +909,7 @@
         <div class="cmp-out">產出：<strong>MRD 市場需求文件</strong></div>
       </div>
     </div>
+    <div class="cmp-note"><strong>「市場」是廣義說法：</strong>MRD 的「市場」不限於對外商業市場——若是內部系統，這裡的「市場」指的就是<strong>內部使用單位</strong>。這個階段不論對內或對外都要做，本質都是<strong>確認需求值不值得做</strong>，不是要你寫市場分析。</div>
   </div>
 
   <div class="cmp-card">
@@ -1074,7 +1084,7 @@
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num">1</div>
           <div class="phase-title-wrap">
-            <div class="phase-title">Concept — 需求發想與市場確認</div>
+            <div class="phase-title">Concept — 需求發想與價值確認</div>
             <div class="phase-subtitle">我們要做什麼？為什麼要做？</div>
           </div>
           <span class="phase-toggle" aria-hidden="true">&#9660;</span>
@@ -1335,7 +1345,7 @@
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num">1</div>
           <div class="phase-title-wrap">
-            <div class="phase-title">Concept — 需求發想與市場確認 <span class="diff-badge kept">保留</span></div>
+            <div class="phase-title">Concept — 需求發想與價值確認 <span class="diff-badge kept">保留</span></div>
             <div class="phase-subtitle">與自行開發完全相同，必須先完成才能進入採購流程</div>
           </div>
           <span class="phase-toggle" aria-hidden="true">&#9660;</span>
@@ -1384,7 +1394,7 @@
 
     <!-- 新增: RFP -->
     <div class="phase-block">
-      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#8FAF9B,#A9C398);"></div></div>
       <div class="phase-card open">
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num new-step">+</div>
@@ -1430,7 +1440,7 @@
 
     <!-- 新增: 合約 -->
     <div class="phase-block">
-      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#8FAF9B,#A9C398);"></div></div>
       <div class="phase-card open">
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num new-step">+</div>
@@ -1471,7 +1481,7 @@
 
     <!-- 新增: Kick-off -->
     <div class="phase-block">
-      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#8FAF9B,#A9C398);"></div></div>
       <div class="phase-card open">
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num new-step">+</div>
@@ -1541,7 +1551,7 @@
 
     <!-- 新增: UAT -->
     <div class="phase-block">
-      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#8FAF9B,#A9C398);"></div></div>
       <div class="phase-card open">
         <div class="phase-header" onclick="togglePhase(this.parentElement)">
           <div class="phase-num new-step">+</div>
@@ -1653,7 +1663,7 @@
     <div class="glossary-grid">
       <div class="glossary-item">
         <div><span class="g-term">MRD</span><span class="g-en">市場需求文件 · Market Requirements Document</span></div>
-        <div class="g-def">說明「為什麼要做這個功能」、解決誰的問題，是需求發想階段的產出。</div>
+        <div class="g-def">說明「為什麼要做這個功能」、解決誰的問題，是需求發想階段的產出。<strong>別被「市場」二字誤導</strong>——它泛指「需求的來源與使用對象」；若是<strong>內部系統</strong>，這裡的「市場」指的就是內部使用單位，重點不在市場分析，而在確認「為誰解決什麼問題、值不值得做」。</div>
       </div>
       <div class="glossary-item">
         <div><span class="g-term">PRD</span><span class="g-en">產品需求文件 · Product Requirements Document</span></div>
