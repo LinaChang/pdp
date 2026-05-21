@@ -76,7 +76,7 @@
     text-align: center;
   }
   .header-eyebrow {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 600;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -304,7 +304,7 @@
     border-left: 3px solid var(--border-muted);
   }
   .d-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -355,7 +355,7 @@
     margin-top: 14px;
   }
   .ai-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1.5px;
     text-transform: uppercase;
@@ -394,7 +394,7 @@
   .diff-badge {
     display: inline-flex;
     align-items: center;
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     padding: 2px 8px;
     border-radius: 5px;
@@ -521,7 +521,7 @@
     border-top: 1px solid var(--border);
   }
   .myth-tag {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.5px;
     padding: 3px 9px;
@@ -582,7 +582,7 @@
   .cmp-col { padding: 12px 16px; }
   .cmp-col + .cmp-col { border-left: 1px solid var(--border); }
   .cmp-col-label {
-    font-size: 10px;
+    font-size: 12px;
     font-weight: 700;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -592,7 +592,7 @@
   .cmp-col-label.vendor { color: var(--accent); }
   .cmp-col p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
   .cmp-out {
-    font-size: 11.5px;
+    font-size: 12px;
     color: var(--text-light);
     margin-top: 6px;
   }
@@ -671,7 +671,7 @@
   }
   .g-term { font-size: 13px; font-weight: 700; color: var(--brand-dark); }
   .g-en {
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--text-light);
     margin-left: 6px;
@@ -681,6 +681,85 @@
     color: var(--text-muted);
     margin-top: 5px;
     line-height: 1.6;
+  }
+
+  /* ── 名詞連結 + 彈窗 ── */
+  .term-link {
+    color: var(--brand);
+    font-weight: inherit;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: color 0.15s, background 0.15s;
+  }
+  .term-link:hover { color: var(--brand-dark); background: var(--brand-light); }
+  .term-link:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+  }
+
+  .term-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(20,42,72,0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+  }
+  .term-modal-overlay.open { display: flex; }
+  .term-modal {
+    position: relative;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: 0 24px 64px rgba(20,42,72,0.32);
+    max-width: 420px;
+    width: 100%;
+    padding: 26px 28px;
+    animation: termModalIn 0.2s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes termModalIn {
+    from { opacity: 0; transform: translateY(12px) scale(0.97); }
+    to { opacity: 1; transform: none; }
+  }
+  .term-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    background: transparent;
+    border: none;
+    font-family: inherit;
+    font-size: 24px;
+    line-height: 1;
+    color: var(--text-light);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .term-modal-close:hover { color: var(--text); background: var(--bg-secondary); }
+  .term-modal-term {
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--brand-dark);
+    padding-right: 28px;
+  }
+  .term-modal-en {
+    font-size: 12.5px;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+  .term-modal-def {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
   }
 
   /* ── RWD ── */
@@ -735,7 +814,7 @@
       </div>
       <div class="howto-item">
         <div class="howto-num">2</div>
-        <div class="howto-text">遇到看不懂的英文縮寫（如 PRD、UAT），到上方的<strong>名詞對照表</strong>頁籤查詢。</div>
+        <div class="howto-text">遇到看不懂的英文縮寫（如 <span class="term-link" data-term="PRD">PRD</span>、<span class="term-link" data-term="UAT">UAT</span>），到上方的<strong>名詞對照表</strong>頁籤查詢。</div>
       </div>
       <div class="howto-item">
         <div class="howto-num">3</div>
@@ -763,7 +842,7 @@
     <div class="myth-item">
       <div class="myth-line wrong">
         <span class="myth-tag wrong">迷思</span>
-        <span class="myth-txt">規格書（PRD）是工程師才需要看的技術文件。</span>
+        <span class="myth-txt">規格書（<span class="term-link" data-term="PRD">PRD</span>）是工程師才需要看的技術文件。</span>
       </div>
       <div class="myth-line right">
         <span class="myth-tag right">正解</span>
@@ -797,14 +876,14 @@
       </div>
       <div class="myth-line right">
         <span class="myth-tag right">正解</span>
-        <span class="myth-txt">上線後要對照當初 MRD 設定的目標追蹤數據、收集回饋，才知道有沒有真正解決問題。</span>
+        <span class="myth-txt">上線後要對照當初 <span class="term-link" data-term="MRD">MRD</span> 設定的目標追蹤數據、收集回饋，才知道有沒有真正解決問題。</span>
       </div>
     </div>
   </div>
 
   <div class="block-title">流程總覽快速表</div>
   <div class="page-intro" style="margin-bottom:20px;">
-    <p>五大階段<strong>自行開發與委外廠商皆相同</strong>；委外情境會額外插入「RFP 選商、合約、Kick-off、UAT 驗收」等廠商管理步驟。下表並列對照，標示 <span class="diff-badge added">委外新增</span> 者為委外才有的步驟。</p>
+    <p>五大階段<strong>自行開發與委外廠商皆相同</strong>；委外情境會額外插入「<span class="term-link" data-term="RFP">RFP</span> 選商、合約、<span class="term-link" data-term="Kick-off">Kick-off</span>、<span class="term-link" data-term="UAT">UAT</span> 驗收」等廠商管理步驟。下表並列對照，標示 <span class="diff-badge added">委外新增</span> 者為委外才有的步驟。</p>
   </div>
 
   <div class="cmp-card">
@@ -813,7 +892,7 @@
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
         <p>釐清要做什麼、為誰解決什麼問題，並與其他需求比較後排定優先級。</p>
-        <div class="cmp-out">產出：<strong>MRD 市場需求文件</strong></div>
+        <div class="cmp-out">產出：<strong><span class="term-link" data-term="MRD">MRD</span> 市場需求文件</strong></div>
       </div>
       <div class="cmp-col">
         <div class="cmp-col-label vendor">委外廠商</div>
@@ -828,8 +907,8 @@
     <div class="cmp-body">
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
-        <p>撰寫 PRD、繪製設計稿，工程師評估技術可行性與工時。</p>
-        <div class="cmp-out">產出：<strong>PRD、Wireframe / Mockup</strong></div>
+        <p>撰寫 <span class="term-link" data-term="PRD">PRD</span>、繪製設計稿，工程師評估技術可行性與工時。</p>
+        <div class="cmp-out">產出：<strong>PRD、<span class="term-link" data-term="Wireframe">Wireframe</span> / <span class="term-link" data-term="Mockup">Mockup</span></strong></div>
       </div>
       <div class="cmp-col">
         <div class="cmp-col-label vendor">委外廠商</div>
@@ -848,7 +927,7 @@
       </div>
       <div class="cmp-col">
         <div class="cmp-col-label vendor">委外廠商</div>
-        <p>發出 RFP / RFQ、收集廠商提案，用評分矩陣比較後簽核選定廠商。</p>
+        <p>發出 RFP / <span class="term-link" data-term="RFQ">RFQ</span>、收集廠商提案，用<span class="term-link" data-term="評分矩陣">評分矩陣</span>比較後簽核選定廠商。</p>
         <div class="cmp-out">產出：<strong>RFP、廠商評分矩陣、選商簽核</strong></div>
       </div>
     </div>
@@ -889,8 +968,8 @@
     <div class="cmp-body">
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
-        <p>內部工程師開發，QA 測試，PM 對照 PRD 驗收。</p>
-        <div class="cmp-out">產出：<strong>Alpha / Beta 版本、測試計畫</strong></div>
+        <p>內部工程師開發，<span class="term-link" data-term="QA">QA</span> 測試，<span class="term-link" data-term="PM">PM</span> 對照 PRD 驗收。</p>
+        <div class="cmp-out">產出：<strong><span class="term-link" data-term="Alpha 版本">Alpha</span> / <span class="term-link" data-term="Beta 版本">Beta 版本</span>、測試計畫</strong></div>
       </div>
       <div class="cmp-col">
         <div class="cmp-col-label vendor">委外廠商</div>
@@ -916,16 +995,16 @@
   </div>
 
   <div class="cmp-card">
-    <div class="cmp-stage"><span class="cmp-no">4</span>Release Candidate｜上線前最終確認</div>
+    <div class="cmp-stage"><span class="cmp-no">4</span><span class="term-link" data-term="Release Candidate">Release Candidate</span>｜上線前最終確認</div>
     <div class="cmp-body">
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
         <p>完成上線清單、對外公告文案、緊急回滾計畫。</p>
-        <div class="cmp-out">產出：<strong>Launch Checklist、公告文案</strong></div>
+        <div class="cmp-out">產出：<strong><span class="term-link" data-term="Launch Checklist">Launch Checklist</span>、公告文案</strong></div>
       </div>
       <div class="cmp-col">
         <div class="cmp-col-label vendor">委外廠商</div>
-        <p>相同，並加入廠商技術移交：程式碼、文件移交與知識轉移（KT）。</p>
+        <p>相同，並加入廠商技術移交：程式碼、文件移交與知識轉移（<span class="term-link" data-term="KT">KT</span>）。</p>
         <div class="cmp-out">產出：<strong>Launch Checklist、移交文件</strong></div>
       </div>
     </div>
@@ -936,7 +1015,7 @@
     <div class="cmp-body">
       <div class="cmp-col">
         <div class="cmp-col-label self">自行開發</div>
-        <p>對照 MRD 目標追蹤數據、收集用戶回饋，並進行 Retrospective。</p>
+        <p>對照 MRD 目標追蹤數據、收集用戶回饋，並進行 <span class="term-link" data-term="Retrospective">Retrospective</span>。</p>
         <div class="cmp-out">產出：<strong>數據儀表板、Retrospective</strong></div>
       </div>
       <div class="cmp-col">
@@ -1002,7 +1081,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">行銷部</span>
             <span class="who-tag">業務</span>
             <span class="who-tag">資深主管</span>
@@ -1051,7 +1130,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">設計師 UI/UX</span>
             <span class="who-tag">工程師（需求評估）</span>
             <span class="who-tag">行銷（確認訊息）</span>
@@ -1148,7 +1227,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">工程師</span>
             <span class="who-tag">行銷（上線物料）</span>
             <span class="who-tag">客服（FAQ 準備）</span>
@@ -1195,7 +1274,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">資料分析</span>
             <span class="who-tag">行銷</span>
             <span class="who-tag">客服</span>
@@ -1263,7 +1342,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">行銷部</span>
             <span class="who-tag">業務</span>
             <span class="who-tag">資深主管</span>
@@ -1287,7 +1366,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">設計師</span>
             <span class="who-tag">法務或採購</span>
           </div>
@@ -1404,7 +1483,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">廠商 PM</span>
             <span class="who-tag">工程窗口</span>
             <span class="who-tag">相關部門</span>
@@ -1514,7 +1593,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">廠商（技術移交）</span>
             <span class="who-tag">內部工程師（接收）</span>
           </div>
@@ -1548,7 +1627,7 @@
         </div>
         <div class="phase-body">
           <div class="who-row">
-            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag lead">專案負責人</span>
             <span class="who-tag">資料分析</span>
             <span class="who-tag">行銷</span>
             <span class="who-tag">客服</span>
@@ -1687,6 +1766,16 @@
 
 </main>
 
+<!-- 名詞解釋彈窗 -->
+<div class="term-modal-overlay" id="termModal" role="dialog" aria-modal="true" aria-labelledby="termModalTerm">
+  <div class="term-modal">
+    <button class="term-modal-close" data-close type="button" aria-label="關閉">&times;</button>
+    <div class="term-modal-term" id="termModalTerm"></div>
+    <div class="term-modal-en" id="termModalEn"></div>
+    <div class="term-modal-def" id="termModalDef"></div>
+  </div>
+</div>
+
 <script>
 function switchTab(id, btn) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
@@ -1703,6 +1792,64 @@ function switchTab(id, btn) {
 function togglePhase(card) {
   card.classList.toggle('open');
 }
+
+/* 名詞 popup：定義直接讀自「名詞對照表」頁籤，維持單一資料來源 */
+(function () {
+  var glossary = {};
+  document.querySelectorAll('#page-glossary .glossary-item').forEach(function (item) {
+    var term = item.querySelector('.g-term');
+    if (!term) return;
+    var en = item.querySelector('.g-en');
+    var def = item.querySelector('.g-def');
+    glossary[term.textContent.trim()] = {
+      en: en ? en.textContent.trim() : '',
+      def: def ? def.textContent.trim() : ''
+    };
+  });
+
+  var overlay = document.getElementById('termModal');
+  var elTerm = document.getElementById('termModalTerm');
+  var elEn = document.getElementById('termModalEn');
+  var elDef = document.getElementById('termModalDef');
+  var lastTrigger = null;
+
+  function openModal(term, trigger) {
+    var entry = glossary[term];
+    if (!entry) return;
+    lastTrigger = trigger || null;
+    elTerm.textContent = term;
+    elEn.textContent = entry.en;
+    elEn.style.display = entry.en ? '' : 'none';
+    elDef.textContent = entry.def;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    overlay.querySelector('.term-modal-close').focus();
+  }
+  function closeModal() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    if (lastTrigger) { lastTrigger.focus(); lastTrigger = null; }
+  }
+
+  document.querySelectorAll('.term-link').forEach(function (el) {
+    el.setAttribute('role', 'button');
+    el.setAttribute('tabindex', '0');
+  });
+
+  document.addEventListener('click', function (e) {
+    var link = e.target.closest('.term-link');
+    if (link) { e.preventDefault(); openModal(link.dataset.term, link); return; }
+    if (e.target === overlay || e.target.closest('[data-close]')) closeModal();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && overlay.classList.contains('open')) { closeModal(); return; }
+    var link = e.target.closest ? e.target.closest('.term-link') : null;
+    if (link && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      openModal(link.dataset.term, link);
+    }
+  });
+})();
 </script>
 </body>
 </html>
