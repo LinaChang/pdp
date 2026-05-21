@@ -1,0 +1,1708 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>系統/平台開發流程 — PDP</title>
+<style>
+  :root {
+    --brand-1: #3B5FBF;
+    --brand-2: #2D7DD2;
+    --brand-3: #1E9FC4;
+    --brand: #2D7DD2;
+    --brand-dark: #1c4fa0;
+    --brand-light: #e8f2fb;
+    --accent: #1E9FC4;
+    --muted: #93b8d4;
+    --border: #dde6ef;
+    --border-muted: #b4cfe3;
+    --bg: #f0f5fa;
+    --bg-card: #ffffff;
+    --bg-secondary: #f7fafd;
+    --text: #1a2a3a;
+    --text-muted: #4a6070;
+    --text-light: #7a96a8;
+    --ai-bg: #edf6fb;
+    --ai-border: #7ec8e3;
+    --ai-text: #0f4a60;
+    --added-bg: #eaf6f1;
+    --added-border: #5bb890;
+    --added-text: #0f3d28;
+    --modified-bg: #eef3fd;
+    --modified-border: #6b96d8;
+    --modified-text: #1a3060;
+    --wrong-bg: #fcecec;
+    --wrong-border: #e3aaaa;
+    --wrong-text: #9c3a3a;
+    --radius: 10px;
+    --radius-lg: 16px;
+    --shadow: 0 2px 12px rgba(45,125,210,0.07), 0 1px 4px rgba(45,125,210,0.04);
+    --shadow-hover: 0 8px 28px rgba(45,125,210,0.14);
+    --tr: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans TC', 'PingFang TC', 'Microsoft JhengHei', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: linear-gradient(135deg, #3B5FBF 0%, #2D7DD2 50%, #1E9FC4 100%);
+    padding: 32px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(30,80,180,0.18);
+  }
+  .header-inner {
+    max-width: 860px;
+    margin: 0 auto;
+  }
+  .header-top {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 14px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+  .header-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 6px;
+  }
+  .header-top h1 {
+    font-size: clamp(18px, 4vw, 24px);
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    justify-content: safe center;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: rgba(255,255,255,0.55);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    padding: 12px 22px 10px;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    border-radius: 4px 4px 0 0;
+  }
+  .tab-btn:hover { color: rgba(255,255,255,0.85); }
+  .tab-btn.active {
+    color: #ffffff;
+    border-bottom-color: rgba(255,255,255,0.85);
+    background: rgba(255,255,255,0.1);
+  }
+
+  /* ── Page layout ── */
+  .page {
+    display: none;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+  .page.active { display: block; }
+
+  /* ── Intro box ── */
+  .page-intro {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin-bottom: 36px;
+    box-shadow: var(--shadow);
+  }
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+  .page-intro p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.85;
+  }
+  .page-intro strong { color: var(--brand-dark); font-weight: 700; }
+
+  /* ── Insight callout ── */
+  .insight-box {
+    background: linear-gradient(135deg, #3B5FBF, #1E9FC4);
+    border-radius: var(--radius-lg);
+    padding: 22px 26px;
+    margin-bottom: 36px;
+    color: #fff;
+  }
+  .insight-box .ihead {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin-bottom: 8px;
+  }
+  .insight-box p {
+    font-size: 14px;
+    line-height: 1.8;
+    opacity: 0.92;
+  }
+  .insight-box strong { opacity: 1; font-weight: 700; }
+
+  /* ── Timeline ── */
+  .timeline { position: relative; }
+  .timeline-axis {
+    position: absolute;
+    left: 22px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, #3B5FBF, #1E9FC4 80%, transparent);
+    border-radius: 2px;
+  }
+  .phase-block {
+    position: relative;
+    padding-left: 62px;
+    margin-bottom: 28px;
+  }
+  .phase-dot {
+    position: absolute;
+    left: 12px;
+    top: 20px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 2px solid var(--border-muted);
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 0 4px var(--bg);
+  }
+  .phase-dot-inner {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-1), var(--accent));
+  }
+
+  /* ── Phase card ── */
+  .phase-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--tr);
+  }
+  .phase-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+    border-color: var(--border-muted);
+  }
+  .phase-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 20px;
+    cursor: pointer;
+    user-select: none;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+  }
+  .phase-num {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(59,95,191,0.25);
+  }
+  .phase-num.new-step {
+    background: linear-gradient(135deg, #3db88a, #1E9FC4);
+    box-shadow: 0 2px 6px rgba(61,184,138,0.3);
+  }
+  .phase-title-wrap { flex: 1; min-width: 0; }
+  .phase-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    line-height: 1.35;
+  }
+  .phase-subtitle {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 3px;
+  }
+  .phase-toggle {
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform 0.25s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .phase-card.open .phase-toggle { transform: rotate(180deg); }
+
+  .phase-body {
+    display: none;
+    padding: 20px 22px;
+  }
+  .phase-card.open .phase-body { display: block; }
+
+  /* ── Deliverables ── */
+  .deliverables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .deliverable-item {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    border-left: 3px solid var(--border-muted);
+  }
+  .d-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 4px;
+  }
+  .d-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-dark);
+  }
+  .d-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  /* ── Who tags ── */
+  .who-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .who-tag {
+    font-size: 12px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    border-radius: 20px;
+    padding: 3px 12px;
+    background: var(--bg-secondary);
+  }
+  .who-tag.lead {
+    background: var(--brand-light);
+    border-color: var(--border-muted);
+    color: var(--brand-dark);
+    font-weight: 700;
+  }
+
+  /* ── AI box ── */
+  .ai-box {
+    background: var(--ai-bg);
+    border-left: 3px solid var(--ai-border);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 14px 16px;
+    margin-top: 14px;
+  }
+  .ai-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .ai-box ul { list-style: none; padding: 0; margin: 0; }
+  .ai-box ul li {
+    font-size: 13px;
+    color: var(--ai-text);
+    padding: 3px 0 3px 16px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .ai-box ul li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ai-border);
+  }
+  .ai-warning {
+    font-size: 12px;
+    color: var(--brand-dark);
+    font-weight: 600;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--ai-border);
+    line-height: 1.6;
+  }
+
+  /* ── Diff badges ── */
+  .diff-badge {
+    display: inline-flex;
+    align-items: center;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 5px;
+    white-space: nowrap;
+    vertical-align: middle;
+    letter-spacing: 0.3px;
+  }
+  .diff-badge.added { background: var(--added-bg); color: var(--added-text); border: 1px solid var(--added-border); }
+  .diff-badge.modified { background: var(--modified-bg); color: var(--modified-text); border: 1px solid var(--modified-border); }
+  .diff-badge.kept { background: var(--bg-secondary); color: var(--text-light); border: 1px solid var(--border); }
+
+  /* ── Vendor note ── */
+  .vendor-note {
+    background: #f0f5fb;
+    border-left: 3px solid var(--brand-2);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    padding: 12px 16px;
+    margin-top: 14px;
+    font-size: 13px;
+    color: var(--modified-text);
+    line-height: 1.65;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 28px;
+    padding: 14px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* ── Block title ── */
+  .block-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+  }
+  .block-title::before {
+    content: '';
+    width: 5px;
+    height: 18px;
+    border-radius: 3px;
+    background: linear-gradient(var(--brand-1), var(--accent));
+    flex-shrink: 0;
+  }
+  .block-title:not(:first-child) { margin-top: 36px; }
+
+  /* ── How-to steps ── */
+  .howto-list {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .howto-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .howto-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 7px;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .howto-text {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.65;
+  }
+  .howto-text strong { color: var(--brand-dark); font-weight: 700; }
+
+  /* ── Myth / misconception ── */
+  .myth-grid { display: grid; gap: 12px; margin-bottom: 36px; }
+  .myth-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .myth-line {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.65;
+  }
+  .myth-line + .myth-line {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+  }
+  .myth-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    padding: 3px 9px;
+    border-radius: 5px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .myth-tag.wrong {
+    background: var(--wrong-bg);
+    color: var(--wrong-text);
+    border: 1px solid var(--wrong-border);
+  }
+  .myth-tag.right {
+    background: var(--added-bg);
+    color: var(--added-text);
+    border: 1px solid var(--added-border);
+  }
+  .myth-txt { color: var(--text-muted); }
+  .myth-line.right .myth-txt { color: var(--text); font-weight: 500; }
+  .myth-txt strong { color: var(--brand-dark); font-weight: 700; }
+
+  /* ── Comparison cards ── */
+  .cmp-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+  .cmp-stage {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 11px 16px;
+    background: var(--bg-secondary);
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .cmp-no {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .cmp-no.add { background: linear-gradient(135deg, #3db88a, #1E9FC4); }
+  .cmp-body { display: grid; grid-template-columns: 1fr 1fr; }
+  .cmp-col { padding: 12px 16px; }
+  .cmp-col + .cmp-col { border-left: 1px solid var(--border); }
+  .cmp-col-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .cmp-col-label.self { color: var(--brand); }
+  .cmp-col-label.vendor { color: var(--accent); }
+  .cmp-col p { font-size: 12.5px; color: var(--text-muted); line-height: 1.6; }
+  .cmp-out {
+    font-size: 11.5px;
+    color: var(--text-light);
+    margin-top: 6px;
+  }
+  .cmp-out strong { color: var(--brand-dark); font-weight: 700; }
+
+  /* ── Decision guide ── */
+  .decide {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .decide-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow);
+  }
+  .decide-card.self { border-top: 3px solid var(--brand-2); }
+  .decide-card.vendor { border-top: 3px solid var(--accent); }
+  .decide-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 8px;
+  }
+  .decide-card ul { list-style: none; padding: 0; margin: 0; }
+  .decide-card li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding: 4px 0 4px 16px;
+    position: relative;
+    line-height: 1.55;
+  }
+  .decide-card li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 12px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--brand-2);
+  }
+
+  /* ── Glossary ── */
+  .glossary-group { margin-bottom: 26px; }
+  .glossary-group-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-dark);
+    margin-bottom: 12px;
+  }
+  .glossary-group-title::before {
+    content: '';
+    width: 4px;
+    height: 15px;
+    border-radius: 2px;
+    background: linear-gradient(var(--brand-1), var(--accent));
+    flex-shrink: 0;
+  }
+  .glossary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 10px;
+  }
+  .glossary-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border-muted);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .g-term { font-size: 13px; font-weight: 700; color: var(--brand-dark); }
+  .g-en {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-light);
+    margin-left: 6px;
+  }
+  .g-def {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 5px;
+    line-height: 1.6;
+  }
+
+  /* ── RWD ── */
+  @media (max-width: 640px) {
+    .site-header { padding: 24px 16px 0; }
+    .page { padding: 28px 14px 64px; }
+    .phase-block { padding-left: 50px; }
+    .timeline-axis { left: 16px; }
+    .phase-dot { left: 6px; }
+    .deliverables { grid-template-columns: 1fr; }
+    .tab-btn { padding: 10px 14px 8px; font-size: 12px; }
+    .phase-header { padding: 14px 16px; }
+    .phase-body { padding: 16px; }
+    .phase-title { font-size: 14px; }
+    .block-title { font-size: 15px; }
+    .cmp-body { grid-template-columns: 1fr; }
+    .cmp-col + .cmp-col { border-left: none; border-top: 1px solid var(--border); }
+    .decide { grid-template-columns: 1fr; }
+    .glossary-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-top">
+      <div>
+        <div class="header-eyebrow">Product Development Process</div>
+        <h1>系統/平台開發流程說明</h1>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="流程頁籤">
+      <button class="tab-btn active" role="tab" aria-selected="true" aria-controls="page-overview" onclick="switchTab('overview',this)">前導頁</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="page-glossary" onclick="switchTab('glossary',this)">名詞對照表</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="page-internal" onclick="switchTab('internal',this)">自行開發流程</button>
+      <button class="tab-btn" role="tab" aria-selected="false" aria-controls="page-vendor" onclick="switchTab('vendor',this)">委外廠商流程</button>
+    </nav>
+  </div>
+</header>
+
+<!-- ══════════════════ 頁籤：前導頁 ══════════════════ -->
+<main id="page-overview" class="page active" role="tabpanel">
+
+  <div class="page-intro">
+    <div class="section-label">如何使用這份文件</div>
+    <p>這是公司<strong>系統/平台開發流程（PDP）</strong>的標準作業程序（SOP）。不論你來自行銷、業務、客服或其他單位，只要參與產品功能的開發，都會用到它。第一次閱讀的人，建議照下面的順序進行。</p>
+    <div class="howto-list">
+      <div class="howto-item">
+        <div class="howto-num">1</div>
+        <div class="howto-text">先看下方的<strong>常見誤區</strong>，建立對流程的正確心態。</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">2</div>
+        <div class="howto-text">遇到看不懂的英文縮寫（如 PRD、UAT），到上方的<strong>名詞對照表</strong>頁籤查詢。</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">3</div>
+        <div class="howto-text">用下方的<strong>流程總覽快速表</strong>建立整體輪廓，了解每個階段在做什麼。</div>
+      </div>
+      <div class="howto-item">
+        <div class="howto-num">4</div>
+        <div class="howto-text">依實際情境，深入閱讀<strong>自行開發流程</strong>或<strong>委外廠商流程</strong>頁籤。每個階段卡片都可點擊展開，看到參與者、產出文件與「AI 可以幫什麼」。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-title">常見誤區</div>
+  <div class="myth-grid">
+    <div class="myth-item">
+      <div class="myth-line wrong">
+        <span class="myth-tag wrong">迷思</span>
+        <span class="myth-txt">有了 AI，需求討論可以跳過，直接做出成品。</span>
+      </div>
+      <div class="myth-line right">
+        <span class="myth-tag right">正解</span>
+        <span class="myth-txt">AI 只是把想法<strong>執行得更快</strong>。需求沒講清楚，AI 只會更快做出錯的東西。需求確認與規格書，才是讓所有人對齊的基礎。</span>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-line wrong">
+        <span class="myth-tag wrong">迷思</span>
+        <span class="myth-txt">規格書（PRD）是工程師才需要看的技術文件。</span>
+      </div>
+      <div class="myth-line right">
+        <span class="myth-tag right">正解</span>
+        <span class="myth-txt">PRD 是所有人對齊的「合約」。行銷、業務、客服都應在它定案前，確認與自己相關的部分。</span>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-line wrong">
+        <span class="myth-tag wrong">迷思</span>
+        <span class="myth-txt">委外給廠商後，把需求丟過去、等成品交回來就好。</span>
+      </div>
+      <div class="myth-line right">
+        <span class="myth-tag right">正解</span>
+        <span class="myth-txt">委外只是換人執行。選商、合約、中期 Check-in、驗收一個都少不了，內部仍要全程把關。</span>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-line wrong">
+        <span class="myth-tag wrong">迷思</span>
+        <span class="myth-txt">流程跑得越快越好，文件能省則省。</span>
+      </div>
+      <div class="myth-line right">
+        <span class="myth-tag right">正解</span>
+        <span class="myth-txt">每個步驟都有存在的理由。跳過任何一步，都會在後面以返工、糾紛或上線出包的形式，用更高的成本補回來。</span>
+      </div>
+    </div>
+    <div class="myth-item">
+      <div class="myth-line wrong">
+        <span class="myth-tag wrong">迷思</span>
+        <span class="myth-txt">功能上線，專案就結束了。</span>
+      </div>
+      <div class="myth-line right">
+        <span class="myth-tag right">正解</span>
+        <span class="myth-txt">上線後要對照當初 MRD 設定的目標追蹤數據、收集回饋，才知道有沒有真正解決問題。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-title">流程總覽快速表</div>
+  <div class="page-intro" style="margin-bottom:20px;">
+    <p>五大階段<strong>自行開發與委外廠商皆相同</strong>；委外情境會額外插入「RFP 選商、合約、Kick-off、UAT 驗收」等廠商管理步驟。下表並列對照，標示 <span class="diff-badge added">委外新增</span> 者為委外才有的步驟。</p>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no">1</span>Concept｜需求發想與市場確認</div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>釐清要做什麼、為誰解決什麼問題，並與其他需求比較後排定優先級。</p>
+        <div class="cmp-out">產出：<strong>MRD 市場需求文件</strong></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>完全相同（保留）。MRD 必須先完成，後續廠商報價才有比較的基礎。</p>
+        <div class="cmp-out">產出：<strong>MRD 市場需求文件</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no">2</span>Plan / Design｜需求確認與規格定義</div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>撰寫 PRD、繪製設計稿，工程師評估技術可行性與工時。</p>
+        <div class="cmp-out">產出：<strong>PRD、Wireframe / Mockup</strong></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>相同，但 PRD 要求更嚴格——它會成為 RFP 附件與日後驗收的依據。</p>
+        <div class="cmp-out">產出：<strong>PRD（需更詳細）</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no add">+</span>RFP 與廠商評估 <span class="diff-badge added">委外新增</span></div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>此步驟不適用，內部開發無需對外選商。</p>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>發出 RFP / RFQ、收集廠商提案，用評分矩陣比較後簽核選定廠商。</p>
+        <div class="cmp-out">產出：<strong>RFP、廠商評分矩陣、選商簽核</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no add">+</span>合約簽訂 <span class="diff-badge added">委外新增</span></div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>此步驟不適用。</p>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>法務主導，明訂驗收標準、付款里程碑、智財與保密條款。</p>
+        <div class="cmp-out">產出：<strong>正式合約</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no add">+</span>Kick-off 含廠商 <span class="diff-badge added">委外新增</span></div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>此步驟不適用，內部團隊無需與外部廠商對齊。</p>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>廠商與內部一起對齊溝通窗口、進度回報方式、問題升級流程與系統權限。</p>
+        <div class="cmp-out">產出：<strong>雙方溝通規則</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no">3</span>Build / Test｜開發與測試</div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>內部工程師開發，QA 測試，PM 對照 PRD 驗收。</p>
+        <div class="cmp-out">產出：<strong>Alpha / Beta 版本、測試計畫</strong></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>廠商工程師執行，內部 PM 持續監督，須安排中期 Demo 確認方向沒跑掉。</p>
+        <div class="cmp-out">產出：<strong>進度報告、中期 Demo</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no add">+</span>UAT 使用者驗收測試 <span class="diff-badge added">委外新增</span></div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>驗收含在 Build / Test 階段內，由 PM 對照 PRD 確認。</p>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>正式對照合約與 PRD 逐項驗收，缺陷限期修正，簽核後觸發付款。</p>
+        <div class="cmp-out">產出：<strong>驗收清單、驗收簽核</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no">4</span>Release Candidate｜上線前最終確認</div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>完成上線清單、對外公告文案、緊急回滾計畫。</p>
+        <div class="cmp-out">產出：<strong>Launch Checklist、公告文案</strong></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>相同，並加入廠商技術移交：程式碼、文件移交與知識轉移（KT）。</p>
+        <div class="cmp-out">產出：<strong>Launch Checklist、移交文件</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cmp-card">
+    <div class="cmp-stage"><span class="cmp-no">5</span>Review｜上線後追蹤與回顧</div>
+    <div class="cmp-body">
+      <div class="cmp-col">
+        <div class="cmp-col-label self">自行開發</div>
+        <p>對照 MRD 目標追蹤數據、收集用戶回饋，並進行 Retrospective。</p>
+        <div class="cmp-out">產出：<strong>數據儀表板、Retrospective</strong></div>
+      </div>
+      <div class="cmp-col">
+        <div class="cmp-col-label vendor">委外廠商</div>
+        <p>完全相同，並額外評估廠商合作表現，作為未來選商的參考。</p>
+        <div class="cmp-out">產出：<strong>數據儀表板、廠商合作評估</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block-title">何時自行開發 vs 委外廠商</div>
+  <div class="decide">
+    <div class="decide-card self">
+      <div class="decide-title">適合自行開發</div>
+      <ul>
+        <li>屬於核心功能，需要長期持續迭代與維護</li>
+        <li>內部已具備對應的技術能力與人力</li>
+        <li>需求預期會頻繁變動，需要快速調整</li>
+        <li>涉及敏感資料或商業機密，不宜外流</li>
+      </ul>
+    </div>
+    <div class="decide-card vendor">
+      <div class="decide-title">適合委外廠商</div>
+      <ul>
+        <li>一次性、專案型或非核心的功能</li>
+        <li>內部缺乏該領域的技術或人力</li>
+        <li>規格明確且穩定，開發期間變動少</li>
+        <li>時程緊迫，需要外部資源加速完成</li>
+      </ul>
+    </div>
+  </div>
+
+</main>
+
+<!-- ══════════════════ 頁籤：自行開發 ══════════════════ -->
+<main id="page-internal" class="page" role="tabpanel">
+
+  <div class="page-intro">
+    <div class="section-label">關於這份文件</div>
+    <p>本頁說明團隊<strong>自行開發</strong>一個產品功能時，從概念到上線的完整流程。每個步驟都有其存在的理由——<strong>跳過任何一步，都會在後續付出更高的成本</strong>。AI 工具可以輔助加速部分工作，但無法取代需求確認與規格撰寫。</p>
+  </div>
+
+  <div class="insight-box">
+    <div class="ihead">核心觀念</div>
+    <p>很多人以為有了 AI，就能「跳過」需求討論直接做出成品。但 AI 只能把你的想法<strong>執行得更快</strong>——如果需求本身沒說清楚，AI 只會更快地做出<strong>錯誤的東西</strong>。</p>
+    <p style="margin-top:12px;"><strong>規格書（PRD）不是寫一次就定稿，而是需要持續迭代的文件。</strong>從需求確認、開發、測試到落地上線，每一個環節都以它為準——規格在過程中每被釐清、修正一次，就少一次認知落差。它更是使用 AI 或其他開發工具時<strong>最關鍵的參考依據</strong>：你餵給工具的規格越清楚、迭代得越完整，產出才會越貼近真正想要的結果。<strong>規格沒迭代到位就開工，等於讓所有人（與 AI）各自猜，最後用返工的成本補回來。</strong></p>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-axis" aria-hidden="true"></div>
+
+    <!-- Phase 1 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">1</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Concept — 需求發想與市場確認</div>
+            <div class="phase-subtitle">我們要做什麼？為什麼要做？</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">行銷部</span>
+            <span class="who-tag">業務</span>
+            <span class="who-tag">資深主管</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">核心產出</div>
+              <div class="d-name">MRD 市場需求文件</div>
+              <div class="d-desc">說明為什麼這個功能值得做，解決誰的問題</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">核心產出</div>
+              <div class="d-name">問題陳述</div>
+              <div class="d-desc">一句話說清楚：我們在為誰、解決什麼問題</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">確認事項</div>
+              <div class="d-name">優先級決策</div>
+              <div class="d-desc">這件事值得現在做嗎？與其他需求比較後的排序</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>整理競品資料、市場研究摘要</li>
+              <li>輔助撰寫 MRD 初稿格式框架</li>
+              <li>快速生成問卷草稿，收集使用者回饋</li>
+            </ul>
+            <div class="ai-warning">但核心決策不能由 AI 完成：「這個需求值不值得做」需要人來判斷與對齊。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 2 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">2</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Plan / Design — 需求確認與規格定義</div>
+            <div class="phase-subtitle">我們要做到什麼程度？細節長什麼樣？</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">設計師 UI/UX</span>
+            <span class="who-tag">工程師（需求評估）</span>
+            <span class="who-tag">行銷（確認訊息）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">最重要產出</div>
+              <div class="d-name">PRD 產品需求文件</div>
+              <div class="d-desc">這份文件是開發的合約，後續所有決策以此為準</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">視覺產出</div>
+              <div class="d-name">Wireframe / Mockup</div>
+              <div class="d-desc">畫面長什麼樣、每個元件如何互動</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">技術評估</div>
+              <div class="d-name">架構設計 / 工時估算</div>
+              <div class="d-desc">工程師確認技術可行性與開發時程</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>輔助 PRD 格式化與初稿生成</li>
+              <li>根據描述快速生成 Wireframe 草圖</li>
+              <li>整理會議紀錄、摘要討論重點</li>
+            </ul>
+            <div class="ai-warning">AI 無法取代這個步驟：需求裡的灰色地帶（Edge case、例外處理）必須由人討論並寫進 PRD。PRD 沒寫到的，工程師可能有三種理解，每一種都不是你想要的。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 3 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">3</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Build / Test — 開發與測試</div>
+            <div class="phase-subtitle">實際把功能做出來，並確認它是對的</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">工程師（主導）</span>
+            <span class="who-tag">QA 測試</span>
+            <span class="who-tag">PM（驗收把關）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">開發里程碑</div>
+              <div class="d-name">Alpha 版本</div>
+              <div class="d-desc">功能基本可用，內部小範圍測試</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">開發里程碑</div>
+              <div class="d-name">Beta 版本</div>
+              <div class="d-desc">功能完整，更廣範圍測試，開始收集回饋</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">品質把關</div>
+              <div class="d-name">測試計畫 / Bug 追蹤</div>
+              <div class="d-desc">確認功能正確性、效能、安全性</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>輔助生成測試案例（Test Cases）清單</li>
+              <li>工程師使用 AI 加速程式碼撰寫（Copilot、Claude Code 等）</li>
+              <li>自動化部分回歸測試腳本</li>
+            </ul>
+            <div class="ai-warning">但驗收邏輯由人決定：「這個功能做對了嗎」的判斷，必須對照 PRD 由 PM 確認，AI 無法替代。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 4 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">4</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Release Candidate — 上線前最終確認</div>
+            <div class="phase-subtitle">準備好了嗎？還有什麼需要對齊？</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">工程師</span>
+            <span class="who-tag">行銷（上線物料）</span>
+            <span class="who-tag">客服（FAQ 準備）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">準備事項</div>
+              <div class="d-name">上線清單 Launch Checklist</div>
+              <div class="d-desc">確認所有前置工作都已完成，無遺漏</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">行銷準備</div>
+              <div class="d-name">公告 / 說明文案</div>
+              <div class="d-desc">用戶溝通素材、FAQ、操作教學</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">回滾計畫</div>
+              <div class="d-name">緊急應變方案</div>
+              <div class="d-desc">預備方案確保能快速回滾或緊急修正</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>輔助撰寫對外公告與 FAQ 文案草稿</li>
+              <li>生成說明文件或 Release Note 格式</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Phase 5 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">5</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Review — 上線後追蹤與回顧</div>
+            <div class="phase-subtitle">上線了，然後呢？有達到當初的目標嗎？</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">資料分析</span>
+            <span class="who-tag">行銷</span>
+            <span class="who-tag">客服</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">量化追蹤</div>
+              <div class="d-name">數據儀表板</div>
+              <div class="d-desc">與 MRD 目標對照，確認功能上線後的實際使用數據</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">質化回饋</div>
+              <div class="d-name">用戶回饋收集</div>
+              <div class="d-desc">使用者問題、客服回報、NPS 等</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">學習沉澱</div>
+              <div class="d-name">Retrospective</div>
+              <div class="d-desc">這次開發什麼做得好？下次什麼要改進？</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>輔助整理用戶回饋的主題分群</li>
+              <li>協助撰寫 Retro 會議紀錄與摘要</li>
+              <li>資料摘要、圖表解讀輔助</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══════════════════ 頁籤：委外廠商 ══════════════════ -->
+<main id="page-vendor" class="page" role="tabpanel">
+
+  <div class="page-intro">
+    <div class="section-label">委外廠商說明</div>
+    <p>採用外部廠商開發時，原本的五個核心階段<strong>一個都省不掉</strong>——執行的人從內部工程師換成了廠商，但每個步驟的目的完全相同。同時，需要額外增加<strong>選商、合約、驗收移交</strong>等廠商管理步驟。</p>
+  </div>
+
+  <div class="legend" aria-label="圖例說明">
+    <div class="legend-item"><div class="legend-dot" style="background:var(--added-border);"></div>新增步驟</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--modified-border);"></div>調整內容</div>
+    <div class="legend-item"><div class="legend-dot" style="background:var(--border);"></div>保留不變</div>
+  </div>
+
+  <div class="timeline">
+    <div class="timeline-axis" aria-hidden="true"></div>
+
+    <!-- 1: Concept 保留 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">1</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Concept — 需求發想與市場確認 <span class="diff-badge kept">保留</span></div>
+            <div class="phase-subtitle">與自行開發完全相同，必須先完成才能進入採購流程</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">行銷部</span>
+            <span class="who-tag">業務</span>
+            <span class="who-tag">資深主管</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.75;">內容與自行開發的 Phase 1 完全一致。MRD 需先完成，才能進入後續採購流程——否則廠商不知道你要什麼，報價也無法比較。</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: PRD 更重要 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">2</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Plan / Design — 需求確認與規格定義 <span class="diff-badge modified">更嚴格</span></div>
+            <div class="phase-subtitle">PRD 在委外情境下是廠商合約的基礎，不能有模糊地帶</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">設計師</span>
+            <span class="who-tag">法務或採購</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">最重要產出</div>
+              <div class="d-name">PRD（需更詳細）</div>
+              <div class="d-desc">這份文件會成為 RFP 的附件，也是驗收的依據。寫得越清楚，廠商誤解越少</div>
+            </div>
+          </div>
+          <div class="vendor-note">委外注意：PRD 在此階段不是草稿，是正式文件。任何需求的模糊地帶，都會在廠商執行時放大為糾紛。請在此階段就寫清楚每個功能的「完成定義」（Definition of Done）。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增: RFP -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num new-step">+</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">RFP 與廠商評估 <span class="diff-badge added">新增</span></div>
+            <div class="phase-subtitle">發出需求書、收集廠商提案、決定合作對象</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM 或採購（主導）</span>
+            <span class="who-tag">法務</span>
+            <span class="who-tag">資深主管（決策）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">發出文件</div>
+              <div class="d-name">RFP / RFQ</div>
+              <div class="d-desc">需求徵集書，附上 PRD 讓廠商了解需求範圍</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">評估產出</div>
+              <div class="d-name">廠商評分矩陣</div>
+              <div class="d-desc">從技術能力、經驗、報價、溝通等維度評估</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">決策產出</div>
+              <div class="d-name">選商簽核</div>
+              <div class="d-desc">主管確認選定廠商，進入合約階段</div>
+            </div>
+          </div>
+          <div class="ai-box">
+            <div class="ai-label">AI 可以幫什麼</div>
+            <ul>
+              <li>輔助整理廠商提案比較表格</li>
+              <li>協助生成評估問卷或評分標準草稿</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增: 合約 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num new-step">+</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">合約簽訂 <span class="diff-badge added">新增</span></div>
+            <div class="phase-subtitle">確立雙方權利義務、付款條件、驗收標準</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">法務（主導）</span>
+            <span class="who-tag">PM</span>
+            <span class="who-tag">採購</span>
+            <span class="who-tag">主管簽核</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">合約關鍵內容</div>
+              <div class="d-name">驗收標準明訂</div>
+              <div class="d-desc">驗收條件必須對應 PRD 的完成定義，避免模糊</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">合約關鍵內容</div>
+              <div class="d-name">付款里程碑</div>
+              <div class="d-desc">何時付多少錢，與開發進度綁定</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">合約關鍵內容</div>
+              <div class="d-name">智財與保密條款</div>
+              <div class="d-desc">程式碼、資料、商業機密的歸屬與保護</div>
+            </div>
+          </div>
+          <div class="vendor-note">法務一定要在這個階段參與。驗收標準寫不清楚，後續糾紛幾乎無法避免。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增: Kick-off -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num new-step">+</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Kick-off 含廠商 <span class="diff-badge added">新增</span></div>
+            <div class="phase-subtitle">正式啟動，確保廠商與內部所有人對齊</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">廠商 PM</span>
+            <span class="who-tag">工程窗口</span>
+            <span class="who-tag">相關部門</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">會議產出</div>
+              <div class="d-name">雙方溝通規則</div>
+              <div class="d-desc">誰是窗口、如何回報進度、問題升級流程</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">確認事項</div>
+              <div class="d-name">環境與存取權限</div>
+              <div class="d-desc">廠商需要什麼系統存取權，如何安全地給</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Build 執行方改變 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">3</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Build / Test — 開發與測試 <span class="diff-badge modified">執行方改變</span></div>
+            <div class="phase-subtitle">廠商執行開發，但內部仍須持續監督與把關</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">廠商工程師（執行）</span>
+            <span class="who-tag lead">PM（監督）</span>
+            <span class="who-tag">內部 QA 或驗收人員</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">廠商提交</div>
+              <div class="d-name">進度報告</div>
+              <div class="d-desc">定期確認開發進度，對照合約里程碑</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">內部把關</div>
+              <div class="d-name">中期 Demo 確認</div>
+              <div class="d-desc">方向有沒有跑掉？早期發現比晚期修改便宜</div>
+            </div>
+          </div>
+          <div class="vendor-note">重要：不能「給需求，等成品」。中途必須有 Check-in，早發現早調整。等到最後才發現方向跑掉，改起來更貴且可能超出合約範圍。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新增: UAT -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner" style="background:linear-gradient(135deg,#3db88a,#1E9FC4);"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num new-step">+</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">UAT 使用者驗收測試 <span class="diff-badge added">新增</span></div>
+            <div class="phase-subtitle">正式對照合約，確認廠商交付物達到標準</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導驗收）</span>
+            <span class="who-tag">QA</span>
+            <span class="who-tag">法務（確認合約履行）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">驗收文件</div>
+              <div class="d-name">驗收清單</div>
+              <div class="d-desc">對照 PRD 與合約，逐項確認功能是否符合</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">驗收結果</div>
+              <div class="d-name">缺陷追蹤與修正</div>
+              <div class="d-desc">列出不符項目，廠商限期修正後再次驗收</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">驗收完成</div>
+              <div class="d-name">驗收簽核</div>
+              <div class="d-desc">正式簽署驗收報告，觸發付款條件</div>
+            </div>
+          </div>
+          <div class="vendor-note">UAT 是省不掉的。「廠商說好了」不等於「真的好了」。驗收清單必須在合約時就定義好，不能到這個階段才討論標準。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Release 保留+移交 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">4</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Release Candidate — 上線前最終確認 <span class="diff-badge modified">加入移交</span></div>
+            <div class="phase-subtitle">加上廠商技術移交程序</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">廠商（技術移交）</span>
+            <span class="who-tag">內部工程師（接收）</span>
+          </div>
+          <div class="deliverables">
+            <div class="deliverable-item">
+              <div class="d-label">移交事項</div>
+              <div class="d-name">程式碼 / 文件移交</div>
+              <div class="d-desc">廠商移交原始碼、架構文件、操作說明</div>
+            </div>
+            <div class="deliverable-item">
+              <div class="d-label">移交事項</div>
+              <div class="d-name">知識轉移 KT</div>
+              <div class="d-desc">廠商向內部說明系統架構，確保後續能自行維護</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Review 保留 -->
+    <div class="phase-block">
+      <div class="phase-dot" aria-hidden="true"><div class="phase-dot-inner"></div></div>
+      <div class="phase-card open">
+        <div class="phase-header" onclick="togglePhase(this.parentElement)">
+          <div class="phase-num">5</div>
+          <div class="phase-title-wrap">
+            <div class="phase-title">Review — 上線後追蹤與回顧 <span class="diff-badge kept">保留</span></div>
+            <div class="phase-subtitle">與自行開發相同，需追蹤是否達成 MRD 目標</div>
+          </div>
+          <span class="phase-toggle" aria-hidden="true">&#9660;</span>
+        </div>
+        <div class="phase-body">
+          <div class="who-row">
+            <span class="who-tag lead">PM（主導）</span>
+            <span class="who-tag">資料分析</span>
+            <span class="who-tag">行銷</span>
+            <span class="who-tag">客服</span>
+          </div>
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.75;">上線後的數據追蹤、用戶回饋收集與 Retrospective，與自行開發完全相同。此外，還需評估廠商合作過程，作為未來選商的參考依據。</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- ══════════════════ 頁籤：名詞對照表 ══════════════════ -->
+<main id="page-glossary" class="page" role="tabpanel">
+
+  <div class="page-intro">
+    <div class="section-label">名詞對照表</div>
+    <p>這份流程會用到不少英文縮寫與專有名詞。下面依主題分類，用白話解釋每個詞的意思。閱讀其他頁籤遇到不懂的詞，回到這裡查就對了。</p>
+  </div>
+
+  <div class="glossary-group">
+    <div class="glossary-group-title">需求與規格文件</div>
+    <div class="glossary-grid">
+      <div class="glossary-item">
+        <div><span class="g-term">MRD</span><span class="g-en">市場需求文件 · Market Requirements Document</span></div>
+        <div class="g-def">說明「為什麼要做這個功能」、解決誰的問題，是需求發想階段的產出。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">PRD</span><span class="g-en">產品需求文件 · Product Requirements Document</span></div>
+        <div class="g-def">定義功能「要做到什麼程度」的詳細規格，是開發的依據；委外時還會成為合約附件。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">RFP</span><span class="g-en">需求徵求書 · Request for Proposal</span></div>
+        <div class="g-def">對外發給廠商的文件，說明需求範圍，邀請廠商提出解決方案與提案。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">RFQ</span><span class="g-en">報價徵求書 · Request for Quotation</span></div>
+        <div class="g-def">與 RFP 類似，但聚焦在請廠商針對明確項目提出報價。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Definition of Done</span><span class="g-en">完成定義 · DoD</span></div>
+        <div class="g-def">事先寫清楚「怎樣才算做完」的標準，避免驗收時雙方各說各話。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Launch Checklist</span><span class="g-en">上線清單</span></div>
+        <div class="g-def">上線前逐項確認所有前置工作都已完成、沒有遺漏的檢查表。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Release Note</span><span class="g-en">版本說明</span></div>
+        <div class="g-def">說明這次更新了哪些功能或修正的文件，可對內或對外發布。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glossary-group">
+    <div class="glossary-group-title">設計與畫面</div>
+    <div class="glossary-grid">
+      <div class="glossary-item">
+        <div><span class="g-term">Wireframe</span><span class="g-en">線框圖</span></div>
+        <div class="g-def">只畫出版面架構與元件位置的草圖，不含顏色與美術設計，用來討論結構。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Mockup</span><span class="g-en">視覺稿 / 高擬真設計稿</span></div>
+        <div class="g-def">接近成品樣貌的設計稿，包含顏色、字體與圖像，讓人預覽完成後的畫面。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">UI / UX</span><span class="g-en">使用者介面 / 使用者體驗</span></div>
+        <div class="g-def">UI 指畫面的長相與元件；UX 指使用過程是否順暢、好懂、感受良好。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glossary-group">
+    <div class="glossary-group-title">開發與測試</div>
+    <div class="glossary-grid">
+      <div class="glossary-item">
+        <div><span class="g-term">Alpha 版本</span></div>
+        <div class="g-def">功能基本可用、僅供內部小範圍測試的早期版本，通常還不穩定。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Beta 版本</span></div>
+        <div class="g-def">功能已完整，開放更廣範圍測試並開始收集使用者回饋的版本。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Release Candidate</span><span class="g-en">候選發行版本 · RC</span></div>
+        <div class="g-def">已準備就緒，若測試沒問題就能正式上線的版本。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">QA</span><span class="g-en">品質保證 · Quality Assurance</span></div>
+        <div class="g-def">負責測試、確認功能正確性、效能與品質的角色或工作。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">回歸測試</span><span class="g-en">Regression Testing</span></div>
+        <div class="g-def">改動程式後重新測試原有功能，確認舊功能沒有被一起改壞。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">UAT</span><span class="g-en">使用者驗收測試 · User Acceptance Testing</span></div>
+        <div class="g-def">由需求方對照規格與合約，逐項確認交付物是否真的符合要求。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Edge case</span><span class="g-en">邊界情況 / 例外狀況</span></div>
+        <div class="g-def">正常流程以外的特殊狀況（如空白輸入、極端數值），最容易被忽略。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="glossary-group">
+    <div class="glossary-group-title">專案與廠商管理</div>
+    <div class="glossary-grid">
+      <div class="glossary-item">
+        <div><span class="g-term">PM</span><span class="g-en">產品經理 · Product Manager</span></div>
+        <div class="g-def">負責定義需求、協調各方、把關產出的角色，是整個流程的主導者。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Kick-off</span><span class="g-en">專案啟動會議</span></div>
+        <div class="g-def">專案正式開始前，讓所有參與者對齊目標、分工與溝通方式的會議。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">KT</span><span class="g-en">知識轉移 · Knowledge Transfer</span></div>
+        <div class="g-def">廠商或前手向接手的人說明系統如何運作，確保後續能自行維護。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">Retrospective</span><span class="g-en">回顧會議 · Retro</span></div>
+        <div class="g-def">專案告一段落後，檢討「哪裡做得好、哪裡要改進」的會議。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">評分矩陣</span><span class="g-en">Scoring Matrix</span></div>
+        <div class="g-def">用多個維度（技術、經驗、報價等）為廠商打分、方便客觀比較的表格。</div>
+      </div>
+      <div class="glossary-item">
+        <div><span class="g-term">NPS</span><span class="g-en">淨推薦值 · Net Promoter Score</span></div>
+        <div class="g-def">衡量使用者願不願意把產品推薦給別人的滿意度指標。</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+function switchTab(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('active');
+    b.setAttribute('aria-selected','false');
+  });
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function togglePhase(card) {
+  card.classList.toggle('open');
+}
+</script>
+</body>
+</html>
